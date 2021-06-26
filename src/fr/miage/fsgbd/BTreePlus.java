@@ -27,22 +27,22 @@ public class BTreePlus<Type> implements java.io.Serializable {
         return bArbreToJTree(racine);
     }
 
-    private DefaultMutableTreeNode bArbreToJTree(Noeud<KeyValue<Type>> root) {
+    private DefaultMutableTreeNode bArbreToJTree(Noeud<Type> root) {
         StringBuilder txt = new StringBuilder();
         for (KeyValue key : root.keys)
             txt.append(key.toString()).append(" ");
 
         DefaultMutableTreeNode racine2 = new DefaultMutableTreeNode(txt.toString(), true);
-        for (KeyValue<Type> fil : root.fils)
+        for (Noeud<Type> fil : root.fils)
             racine2.add(bArbreToJTree(fil));
 
         return racine2;
     }
 
 
-    public boolean addValeur(Type valeur) {
+    public boolean addValeur(KeyValue<Type> valeur) {
         System.out.println("Ajout de la valeur : " + valeur.toString());
-        if (racine.contient(valeur) == null) {
+        if (racine.contient(valeur.getKey()) == null) {
             Noeud<Type> newRacine = racine.addValeur(valeur);
             if (racine != newRacine)
                 racine = newRacine;
