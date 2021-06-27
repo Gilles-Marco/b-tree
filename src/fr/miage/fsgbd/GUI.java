@@ -48,7 +48,7 @@ public class GUI extends JFrame implements ActionListener {
             if (e.getSource() == buttonAddMany) {
                 for (int i = 0; i < Integer.parseInt(txtNbreItem.getText()); i++) {
                     int valeur = (int) (Math.random() * 10 * Integer.parseInt(txtNbreItem.getText()));
-                    boolean done = bInt.addValeur(valeur);
+                    boolean done = bInt.addValeur(new KeyValue<Integer>(valeur, new Object()));
 
 					/*
 					  On pourrait forcer l'ajout mais on risque alors de tomber dans une boucle infinie sans "r?gle" faisant sens pour en sortir
@@ -62,7 +62,7 @@ public class GUI extends JFrame implements ActionListener {
                 }
 
             } else if (e.getSource() == buttonAddItem) {
-                if (!bInt.addValeur(Integer.parseInt(txtNbreSpecificItem.getText())))
+                if (!bInt.addValeur(new KeyValue<Integer>(Integer.parseInt(txtNbreSpecificItem.getText()), new Object())));
                     System.out.println("Tentative d'ajout d'une valeur existante : " + txtNbreSpecificItem.getText());
                 txtNbreSpecificItem.setText(
                         String.valueOf(
