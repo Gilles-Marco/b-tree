@@ -2,29 +2,29 @@ package fr.miage.fsgbd;
 
 import java.util.Objects;
 
-public class KeyValue<Type> {
+public class KeyValue<KeyType, ValueType> {
 
-    private Type key;
-    private Object value;
+    private KeyType key;
+    private ValueType value;
 
-    public KeyValue(Type key, Object value) {
+    public KeyValue(KeyType key, ValueType value) {
         this.key = key;
         this.value = value;
     }
 
-    public Type getKey() {
+    public KeyType getKey() {
         return key;
     }
 
-    public void setKey(Type key) {
+    public void setKey(KeyType key) {
         this.key = key;
     }
 
-    public Object getValue() {
+    public ValueType getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(ValueType value) {
         this.value = value;
     }
 

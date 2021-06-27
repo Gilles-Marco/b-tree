@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
  * @author LAUGIER Vincent; COFFRE Jean-Denis
  * @author Galli Gregory, Mopolo Moke Gabriel
  */
-public class Noeud<Type> implements java.io.Serializable {
+public class Noeud<Type, ValueType> implements java.io.Serializable {
 
 
     // Collection des Noeuds enfants du noeud courant
-    public ArrayList<Noeud<Type>> fils = new ArrayList();
+    public ArrayList<Noeud<Type, ValueType>> fils = new ArrayList();
 
     // Collection des clés du noeud courant
-    public ArrayList<KeyValue<Type>> keys = new ArrayList();
+    public ArrayList<KeyValue<Type, ValueType>> keys = new ArrayList();
 
     // Noeud Parent du noeud courant
-    private Noeud<Type> parent;
+    private Noeud<Type, ValueType> parent;
 
     // Classe interfaçant "Executable" et donc contenant une procédure de comparaison de <Type>
     private Executable compar;
@@ -34,7 +34,7 @@ public class Noeud<Type> implements java.io.Serializable {
      * @param e Classe interfaçant "Executable" et donc contenant une procédure de comparaison de <Type>
      * @param parent Nombre de clés minimum du noeud
      */
-    public Noeud(int u, Executable e, Noeud<Type> parent) {
+    public Noeud(int u, Executable e, Noeud<Type, ValueType> parent) {
         this.u = u;
         this.tailleMin = u / 2;
         compar = e;
@@ -51,15 +51,15 @@ public class Noeud<Type> implements java.io.Serializable {
      * @param valeur Valeur à rechercher dans la branche
      * @return le Noeud trouvé / null
      */
-    public Noeud<Type> contient(Type valeur) {
-        Noeud<Type> retour = null;
+    public Noeud<Type, ValueType> contient(Type valeur) {
+        Noeud<Type, ValueType> retour = null;
 
         ArrayList<Type> keys = new ArrayList(this.keys.stream().map(KeyValue::getKey).collect(Collectors.toList()));
 
         if (keys.contains(valeur) && (this.fils.isEmpty())) {
             retour = this;
         } else {
-            Noeud<Type> trouve = null;
+            Noeud<Type, ValueType> trouve = null;
             int i = 0;
 
             while ((trouve == null) && (i < this.fils.size())) {
@@ -79,8 +79,8 @@ public class Noeud<Type> implements java.io.Serializable {
      * @param valeur que l'on souhaite insérer
      * @return le Noeud choisi
      */
-    public Noeud<Type> choixNoeudAjout(KeyValue<Type> valeur) {
-        Noeud<Type> retour = null;
+    public Noeud<Type, ValueType> choixNoeudAjout(KeyValue<Type, ValueType> valeur) {
+        Noeud<Type, ValueType> retour = null;
 
         if (this.fils.size() == 0) {
             retour = this;
@@ -120,7 +120,7 @@ public class Noeud<Type> implements java.io.Serializable {
         System.out.println(dots);
 
         if (afficheSousNoeuds) {
-            for (Noeud<Type> noeud : this.fils) {
+            for (Noeud<Type, ValueType> noeud : this.fils) {
                 noeud.afficheNoeud(afficheSousNoeuds, lvl + 1);
             }
         }
@@ -132,7 +132,7 @@ public class Noeud<Type> implements java.io.Serializable {
      *
      * @param valeur à ajouter aux clefs du noeud courant
      */
-    private void insert(KeyValue<Type> valeur) {
+    private void insert(KeyValue<Type, ValueType> valeur) {
         int i = 0;
         while ((this.keys.size() > i) && compare(this.keys.get(i).getKey(), valeur.getKey())) {
             i++;
@@ -167,8 +167,8 @@ public class Noeud<Type> implements java.io.Serializable {
      *
      */
 
-    public Noeud<Type> addValeur(KeyValue<Type> nouvelleValeur) {
-        Noeud<Type> racine = addValeur(nouvelleValeur, false);
+    public Noeud<Type, ValueType> addValeur(KeyValue<Type, ValueType> nouvelleValeur) {
+        Noeud<Type, ValueType> racine = addValeur(nouvelleValeur, false);
         return racine;
     }
 
@@ -177,7 +177,7 @@ public class Noeud<Type> implements java.io.Serializable {
      *
      * @param noeud à ajouter
      */
-    public void addNoeud(Noeud<Type> noeud) {
+    public void addNoeud(Noeud<Type, ValueType> noeud) {
         int i = 0;
 
         if (i == this.fils.size()) {
@@ -195,7 +195,7 @@ public class Noeud<Type> implements java.io.Serializable {
      * @param noeud à retirer
      * @return boolean
      */
-    public boolean removeNoeud(Noeud<Type> noeud) {
+    public boolean removeNoeud(Noeud<Type, ValueType> noeud) {
         return fils.remove(noeud);
     }
 
@@ -205,10 +205,10 @@ public class Noeud<Type> implements java.io.Serializable {
      * @param valeur à retirer
      * @return la <Noeud>racine</Noeud> de l'arbre
      */
-    public Noeud<Type> removeValeur(Type valeur, boolean force) {
+    public Noeud<Type, ValueType> removeValeur(Type valeur, boolean force) {
         System.out.println("removeValeur : " + valeur + ", force : " + force);
-        Noeud<Type> noeud, racine = this;
-        KeyValue<Type> kv = this.keys.stream().filter(typeKeyValue -> typeKeyValue.getKey() == valeur).collect(Collectors.toList()).get(0);
+        Noeud<Type, ValueType> noeud, racine = this;
+        KeyValue<Type, ValueType> kv = this.keys.stream().filter(typeKeyValue -> typeKeyValue.getKey() == valeur).collect(Collectors.toList()).get(0);
         Type eleMedian, nouvelleClef = null;
         int indexMedian;
 
@@ -236,9 +236,9 @@ public class Noeud<Type> implements java.io.Serializable {
             // Si on est pas à la racine
             if (noeud.parent != null) {
                 // On va aller chercher dans le noeud suivant
-                Noeud<Type> suivant = noeud.getNoeudSuivant();
-                KeyValue<Type> remplacant = null;
-                KeyValue<Type> valeurARemplacer = null;
+                Noeud<Type, ValueType> suivant = noeud.getNoeudSuivant();
+                KeyValue<Type, ValueType> remplacant = null;
+                KeyValue<Type, ValueType> valeurARemplacer = null;
                 // Si le noeud suivant existe et possède assez de clefs
                 if (suivant != null && suivant.keys.size() > tailleMin) {
                     remplacant = suivant.keys.get(0);
@@ -252,7 +252,7 @@ public class Noeud<Type> implements java.io.Serializable {
                     remplacerDansParents(noeud.parent, kv, noeud.keys.get(0));
                 } else {
                     // Sinon on ira chercher dans le noeud précédent
-                    Noeud<Type> precedent = noeud.getNoeudPrecedent();
+                    Noeud<Type, ValueType> precedent = noeud.getNoeudPrecedent();
                     // S'il y a un précédent et que celui ci possède assez de clefs
                     if (precedent != null && precedent.keys.size() > tailleMin) {
                         // On prend la dernière clef
@@ -269,7 +269,7 @@ public class Noeud<Type> implements java.io.Serializable {
                         if (precedent != null && precedent.keys.size() < u) {
                             // On mets toutes les clefs restantes dans le noeud courant dans le noeud précédent tant que ce dernier peut en accueillir
                             while (!noeud.keys.isEmpty() && precedent.keys.size() < u) {
-                                KeyValue<Type> valeurADeplacer = noeud.keys.get(0);
+                                KeyValue<Type, ValueType> valeurADeplacer = noeud.keys.get(0);
                                 precedent.keys.add(valeurADeplacer);
                                 noeud.keys.remove(0);
                             }
@@ -282,14 +282,14 @@ public class Noeud<Type> implements java.io.Serializable {
                             }
                         } else // si pas de précédent ou de suivant / pas de place / le noeud courant est le seul fils > On réduit la hauteur
                         {
-                            ArrayList<KeyValue<Type>> keyz = new ArrayList<>();
+                            ArrayList<KeyValue<Type, ValueType>> keyz = new ArrayList<>();
                             // On rééquilibre l'arbre
                             racine.reequilibrer(keyz);
                             racine.fils.clear();
                             racine.keys.clear();
-                            for (KeyValue<Type> key : keyz) {
+                            for (KeyValue<Type, ValueType> key : keyz) {
                                 if (racine.contient(valeur) == null) {
-                                    Noeud<Type> newRacine = racine.addValeur(key);
+                                    Noeud<Type, ValueType> newRacine = racine.addValeur(key);
                                     if (racine != newRacine)
                                         racine = newRacine;
                                 }
@@ -314,13 +314,13 @@ public class Noeud<Type> implements java.io.Serializable {
         if (noeud.parent != null && noeud.parent.fils.size() <= 1) {   // On rééquilibre l'arbre ( pour potentiellement dimunuer la hauteur de l'arbre )
             if (noeud.parent.getNoeudSuivant() != null || noeud.parent.getNoeudPrecedent() != null) {
                 System.out.println("Besoin de rééquilibrer l'arbre");
-                ArrayList<KeyValue<Type>> keyz = new ArrayList<>();
+                ArrayList<KeyValue<Type, ValueType>> keyz = new ArrayList<>();
                 racine.reequilibrer(keyz);
                 racine.fils.clear();
                 racine.keys.clear();
-                for (KeyValue<Type> key : keyz) {
+                for (KeyValue<Type, ValueType> key : keyz) {
                     if (racine.contient(valeur) == null) {
-                        Noeud<Type> newRacine = racine.addValeur(key);
+                        Noeud<Type, ValueType> newRacine = racine.addValeur(key);
                         if (racine != newRacine)
                             racine = newRacine;
                     }
@@ -336,18 +336,18 @@ public class Noeud<Type> implements java.io.Serializable {
         return racine;
     }
 
-    public void reequilibrer(ArrayList<KeyValue<Type>> keyz) {
-        for (Noeud<Type> noeud : this.fils) {
+    public void reequilibrer(ArrayList<KeyValue<Type, ValueType>> keyz) {
+        for (Noeud<Type, ValueType> noeud : this.fils) {
             if (noeud.fils.isEmpty())
                 keyz.addAll(noeud.keys);
             else {
-                for (Noeud<Type> fils : noeud.fils)
+                for (Noeud<Type, ValueType> fils : noeud.fils)
                     fils.reequilibrer(keyz);
             }
         }
     }
 
-    public void remplacerDansParents(Noeud<Type> noeud, KeyValue<Type> aRemplacer, KeyValue<Type> remplacant) {
+    public void remplacerDansParents(Noeud<Type, ValueType> noeud, KeyValue<Type, ValueType> aRemplacer, KeyValue<Type, ValueType> remplacant) {
         if (noeud.keys.contains(aRemplacer)) {
             noeud.keys.set(noeud.keys.indexOf(aRemplacer), remplacant);
         }
@@ -355,12 +355,12 @@ public class Noeud<Type> implements java.io.Serializable {
             remplacerDansParents(noeud.parent, aRemplacer, remplacant);
     }
 
-    public Noeud<Type> getNoeudSuivant() {
-        Noeud<Type> suivant = null;
+    public Noeud<Type, ValueType> getNoeudSuivant() {
+        Noeud<Type, ValueType> suivant = null;
         if (this.parent != null) {
-            Noeud<Type> parent = this.parent;
+            Noeud<Type, ValueType> parent = this.parent;
             boolean trouve = false;
-            for (Noeud<Type> fils : parent.fils) {
+            for (Noeud<Type, ValueType> fils : parent.fils) {
                 if (trouve) {
                     suivant = fils;
                     break;
@@ -374,10 +374,10 @@ public class Noeud<Type> implements java.io.Serializable {
         return suivant;
     }
 
-    public Noeud<Type> getNoeudPrecedent() {
-        Noeud<Type> precedent = null;
+    public Noeud<Type, ValueType> getNoeudPrecedent() {
+        Noeud<Type, ValueType> precedent = null;
         if (this.parent != null) {
-            Noeud<Type> parent = this.parent;
+            Noeud<Type, ValueType> parent = this.parent;
             for (int i = 0; i < parent.fils.size(); i++) {
                 // Si le fils que l'on analyse est le noeud dont on cherche le précédent alors on retourne le fils précédent
                 if (i != 0 && parent.fils.get(i) == this) {
@@ -389,7 +389,7 @@ public class Noeud<Type> implements java.io.Serializable {
         return precedent;
     }
 
-    public boolean parentContient(Noeud<Type> noeud, Type valeur) {
+    public boolean parentContient(Noeud<Type, ValueType> noeud, Type valeur) {
         boolean trouve = false;
         while (noeud.parent != null) {
             noeud = noeud.parent;
@@ -406,11 +406,11 @@ public class Noeud<Type> implements java.io.Serializable {
      * @param force,         booléen spécificiant que l'on doit ajouter au noeud courant et non pas chercher l'endroit où insérer la nouvelle valeur
      * @return la <Noeud>racine</Noeud> de l'arbre
      */
-    public Noeud<Type> addValeur(KeyValue<Type> nouvelleValeur, boolean force) {
+    public Noeud<Type, ValueType> addValeur(KeyValue<Type, ValueType> nouvelleValeur, boolean force) {
 
         // Initialisation des variables
-        Noeud<Type> noeud, racine = this;
-        KeyValue<Type> eleMedian;
+        Noeud<Type, ValueType> noeud, racine = this;
+        KeyValue<Type, ValueType> eleMedian;
         int indexMedian;
 
         // On remonte jusqu'à la racine à partir du noeud courant
@@ -434,8 +434,8 @@ public class Noeud<Type> implements java.io.Serializable {
 
 
                 // On crée deux nouveaux noeuds
-                Noeud<Type> noeudGauche = new Noeud<Type>(u, compar, null);
-                Noeud<Type> noeudDroit = new Noeud<Type>(u, compar, null);
+                Noeud<Type, ValueType> noeudGauche = new Noeud<Type, ValueType>(u, compar, null);
+                Noeud<Type, ValueType> noeudDroit = new Noeud<Type, ValueType>(u, compar, null);
 
                 // On insère la valeur comme nouvelle clef du noeud courant
                 noeud.insert(nouvelleValeur);
@@ -483,7 +483,7 @@ public class Noeud<Type> implements java.io.Serializable {
                 // Enfin, si le noeud courant est la racine
                 if (noeud.parent == null) {
                     // On crée un nouveau noeud qui prendra sa place
-                    Noeud<Type> nouveauParent = new Noeud<Type>(u, compar, null);
+                    Noeud<Type, ValueType> nouveauParent = new Noeud<Type, ValueType>(u, compar, null);
 
                     // Qui deviendra le parent des noeuds gauche et droit
                     nouveauParent.addNoeud(noeudGauche);

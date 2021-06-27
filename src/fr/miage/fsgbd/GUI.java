@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class GUI extends JFrame implements ActionListener {
     TestInteger testInt = new TestInteger();
-    BTreePlus<Integer> bInt;
+    BTreePlus<Integer, FrenchIdentity> bInt;
     private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh;
     private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific;
     private final JTree tree = new JTree();
@@ -26,7 +26,7 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == buttonLoad || e.getSource() == buttonClean || e.getSource() == buttonSave || e.getSource() == buttonRefresh) {
             if (e.getSource() == buttonLoad) {
-                BDeserializer<Integer> load = new BDeserializer<Integer>();
+                BDeserializer<Integer, FrenchIdentity> load = new BDeserializer<Integer, FrenchIdentity>();
                 bInt = load.getArbre(txtFile.getText());
                 if (bInt == null)
                     System.out.println("Echec du chargement.");
@@ -35,20 +35,20 @@ public class GUI extends JFrame implements ActionListener {
                 if (Integer.parseInt(txtU.getText()) < 2)
                     System.out.println("Impossible de cr?er un arbre dont le nombre de clés est inférieur ? 2.");
                 else
-                    bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
+                    bInt = new BTreePlus<Integer, FrenchIdentity>(Integer.parseInt(txtU.getText()), testInt);
             } else if (e.getSource() == buttonSave) {
-                BSerializer<Integer> save = new BSerializer<Integer>(bInt, txtFile.getText());
+                BSerializer<Integer, FrenchIdentity> save = new BSerializer<Integer, FrenchIdentity>(bInt, txtFile.getText());
             } else if (e.getSource() == buttonRefresh) {
                 tree.updateUI();
             }
         } else {
             if (bInt == null)
-                bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
+                bInt = new BTreePlus<Integer, FrenchIdentity>(Integer.parseInt(txtU.getText()), testInt);
 
             if (e.getSource() == buttonAddMany) {
                 for (int i = 0; i < Integer.parseInt(txtNbreItem.getText()); i++) {
                     int valeur = (int) (Math.random() * 10 * Integer.parseInt(txtNbreItem.getText()));
-                    boolean done = bInt.addValeur(new KeyValue<Integer>(valeur, new Object()));
+                    boolean done = bInt.addValeur(new KeyValue<Integer, FrenchIdentity>(valeur, new FrenchIdentity()));
 
 					/*
 					  On pourrait forcer l'ajout mais on risque alors de tomber dans une boucle infinie sans "r?gle" faisant sens pour en sortir
@@ -62,8 +62,9 @@ public class GUI extends JFrame implements ActionListener {
                 }
 
             } else if (e.getSource() == buttonAddItem) {
-                if (!bInt.addValeur(new KeyValue<Integer>(Integer.parseInt(txtNbreSpecificItem.getText()), new Object())));
-                    System.out.println("Tentative d'ajout d'une valeur existante : " + txtNbreSpecificItem.getText());
+                if (!bInt.addValeur(new KeyValue<Integer, FrenchIdentity>(Integer.parseInt(txtNbreSpecificItem.getText()), new FrenchIdentity())))
+                    ;
+                System.out.println("Tentative d'ajout d'une valeur existante : " + txtNbreSpecificItem.getText());
                 txtNbreSpecificItem.setText(
                         String.valueOf(
                                 Integer.parseInt(txtNbreSpecificItem.getText()) + 2
