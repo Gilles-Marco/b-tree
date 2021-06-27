@@ -6,6 +6,7 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -14,8 +15,9 @@ import java.util.ArrayList;
 public class GUI extends JFrame implements ActionListener {
     TestInteger testInt = new TestInteger();
     BTreePlus<Integer, FrenchIdentity> bInt;
-    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh;
-    private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific;
+    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh, buttonOpenFileDialog, buttonLoadFile;
+    private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific, pathDataFile;
+    private JFileChooser fileChooser;
     private final JTree tree = new JTree();
 
     public GUI() {
@@ -73,14 +75,28 @@ public class GUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == buttonRemove) {
                 bInt.removeValeur(Integer.parseInt(removeSpecific.getText()));
+            } else if (e.getSource() == buttonLoadFile) {
+                System.out.println("Load the data from the file");
+                bInt = new BTreePlus<>(Integer.parseInt(txtU.getText()), testInt);
+                // Todo implements load data csv function
             }
         }
 
-        tree.setModel(new DefaultTreeModel(bInt.bArbreToJTree()));
-        for (int i = 0; i < tree.getRowCount(); i++)
-            tree.expandRow(i);
+        if (e.getSource() == buttonOpenFileDialog) {
+            System.out.println("Open dialog to choose a file");
+            int returnVal = fileChooser.showOpenDialog(GUI.this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                pathDataFile.setText(file.getAbsolutePath());
+            }
+        } else {
+            tree.setModel(new DefaultTreeModel(bInt.bArbreToJTree()));
+            for (int i = 0; i < tree.getRowCount(); i++)
+                tree.expandRow(i);
 
-        tree.updateUI();
+            tree.updateUI();
+        }
+
     }
 
     private void build() {
@@ -218,12 +234,35 @@ public class GUI extends JFrame implements ActionListener {
         c.gridwidth = 2;
         pane1.add(buttonRefresh, c);
 
+        pathDataFile = new JTextField("", 7);
+        c.gridx = 0;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(pathDataFile, c);
+
+        fileChooser = new JFileChooser();
+
+        buttonOpenFileDialog = new JButton("Open dialog to choose a file");
+        c.gridx = 1;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(buttonOpenFileDialog, c);
+
+        buttonLoadFile = new JButton("Load data file");
+        c.gridx = 2;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 2;
+        pane1.add(buttonLoadFile, c);
+
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 400;       //reset to default
         c.weighty = 1.0;   //request any extra vertical space
         c.gridwidth = 4;   //2 columns wide
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 9;
 
         JScrollPane scrollPane = new JScrollPane(tree);
         pane1.add(scrollPane, c);
@@ -239,6 +278,8 @@ public class GUI extends JFrame implements ActionListener {
         buttonRemove.addActionListener(this);
         buttonClean.addActionListener(this);
         buttonRefresh.addActionListener(this);
+        buttonLoadFile.addActionListener(this);
+        buttonOpenFileDialog.addActionListener(this);
 
         return pane1;
     }
