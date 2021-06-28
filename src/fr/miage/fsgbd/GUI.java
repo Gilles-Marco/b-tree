@@ -6,7 +6,7 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -78,7 +78,33 @@ public class GUI extends JFrame implements ActionListener {
             } else if (e.getSource() == buttonLoadFile) {
                 System.out.println("Load the data from the file");
                 bInt = new BTreePlus<>(Integer.parseInt(txtU.getText()), testInt);
-                // Todo implements load data csv function
+                BufferedReader reader;
+                try {
+                    reader = new BufferedReader(new FileReader(new File(pathDataFile.getText())));
+                    String line = reader.readLine();
+                    int indexRow = 0;
+                    while (line != "" && line != null) {
+                        String[] tokens = line.split(";");
+                        if (indexRow > 0) { // Ignore header
+                            if (tokens.length == 5) {
+                                FrenchIdentity identity = new FrenchIdentity(tokens[4], tokens[1], tokens[2], Integer.parseInt(tokens[3]));
+                                bInt.addValeur(new KeyValue<Integer, FrenchIdentity>(Integer.parseInt(tokens[0]), identity));
+                            }
+                        }
+                        try {
+                            line = reader.readLine();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        indexRow++;
+                    }
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+
             }
         }
 
