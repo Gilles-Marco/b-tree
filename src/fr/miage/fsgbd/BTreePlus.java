@@ -1,6 +1,9 @@
 package fr.miage.fsgbd;
 
+import com.sun.jdi.Value;
+
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.Stack;
 
 
 /**
@@ -59,5 +62,36 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
             if (racine != newRacine)
                 racine = newRacine;
         }
+    }
+
+    public KeyValue<Type, ValueType> rechercheArbre(Type valeur) {
+        Noeud<Type, ValueType> noeud = this.racine.contient(valeur);
+        if (noeud != null) {
+            for (KeyValue<Type, ValueType> kv : noeud.keys) {
+                if (kv.getKey().equals(valeur)) return kv;
+            }
+        }
+        return null;
+    }
+
+    public KeyValue<Type, ValueType> rechercheSequentielle(Type valeur) {
+        Stack<Noeud<Type, ValueType>> stack = new Stack();
+
+        Noeud<Type, ValueType> noeud = this.racine;
+
+        do {
+            for (KeyValue<Type, ValueType> kv : noeud.keys) {
+                if (kv.getKey().equals(valeur)) return kv;
+            }
+
+            if (noeud.fils != null && noeud.fils.size() > 0) {
+                if (stack.addAll(noeud.fils)) System.out.println("Add to stack");
+                else System.out.println("Error couldnt add to the stack");
+            }
+
+            System.out.println("Pop stack");
+            noeud = stack.pop();
+        } while (!stack.empty());
+        return null;
     }
 }
