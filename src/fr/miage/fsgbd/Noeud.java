@@ -146,7 +146,7 @@ public class Noeud<Type, ValueType> implements java.io.Serializable {
      * @param valeur à retirer des clefs du noeud courant
      */
     private void removeKey(Type valeur) {
-        this.keys = new ArrayList(this.keys.stream().filter(typeKeyValue -> typeKeyValue != valeur).collect(Collectors.toList()));
+        this.keys = new ArrayList(this.keys.stream().filter(typeKeyValue -> !typeKeyValue.getKey().equals(valeur)).collect(Collectors.toList()));
     }
 
 
@@ -210,7 +210,7 @@ public class Noeud<Type, ValueType> implements java.io.Serializable {
         Noeud<Type, ValueType> noeud, racine = this;
 
         // Récupération de la KeyValue avec la valeur qu'on cherche supprimer
-        ArrayList<KeyValue<Type, ValueType>> kvs = new ArrayList(this.keys.stream().filter(typeKeyValue -> typeKeyValue.getKey() == valeur).collect(Collectors.toList()));
+        ArrayList<KeyValue<Type, ValueType>> kvs = new ArrayList(this.keys.stream().filter(typeKeyValue -> typeKeyValue.getKey().equals(valeur)).collect(Collectors.toList()));
         KeyValue<Type, ValueType> kv = null;
         if (kvs.size() > 0) kv = kvs.get(0);
 
