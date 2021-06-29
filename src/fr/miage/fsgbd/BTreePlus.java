@@ -74,6 +74,29 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
         return null;
     }
 
+    public KeyValue<Type, ValueType> rechercheArbreHomemade(Type valeur){
+        Noeud<Type, ValueType> noeud = this.racine;
+        KeyValue<Type, ValueType> result = null;
+
+        while(result == null){
+            int index = 0;
+            for(KeyValue<Type, ValueType> kv : this.racine.keys){
+                if(valeur.equals(kv.getKey())){
+                    result = kv;
+                    break;
+                }
+
+                if(noeud.compare(kv.getKey(), valeur)) break;
+                else index++;
+            }
+
+            if(noeud.fils.size() == 0 || noeud.fils.size() < index) break;
+            else noeud = noeud.fils.get(index);
+        }
+
+        return result;
+    }
+
     public KeyValue<Type, ValueType> rechercheSequentielle(Type valeur) {
         Stack<Noeud<Type, ValueType>> stack = new Stack();
 
@@ -89,7 +112,7 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
                 //else System.out.println("Error couldnt add to the stack");
             }
 
-            System.out.println("Pop stack");
+//            System.out.println("Pop stack");
             noeud = stack.pop();
         } while (!stack.empty());
         return null;

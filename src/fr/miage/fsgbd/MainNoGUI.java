@@ -51,7 +51,7 @@ public class MainNoGUI {
         for(int i=0; i<100; i++) {
             Integer val = (int)(Math.random() * (10000-1));
             long startTimeTmmp = System.nanoTime();
-            bInt.rechercheArbre(val);
+            bInt.rechercheArbreHomemade(val);
             long endTimeTmp = System.nanoTime();
             long timeElapsedTmp = endTimeTmp - startTimeTmmp;
             if(maxTime<timeElapsedTmp) {
@@ -65,12 +65,38 @@ public class MainNoGUI {
         long timeElapsed = endTime - startTime;
         long moyenneParRecherche = timeElapsed/100;
         System.out.println();
+        System.out.println("rechercheArbreHomemade() : " + moyenneParRecherche/1000 + " microsecondes d'execution en moyenne !");
+        System.out.println("temps minimum : " + minTime/1000 + " microsecondes d'execution");
+        System.out.println("temps maximum : " + maxTime/1000 + " microsecondes d'execution");
+
+        //test de temps
+        //2: rechercheArbre()
+        startTime = System.nanoTime();
+        minTime = 147483647;
+        maxTime = 0;
+        for(int i=0; i<100; i++) {
+            Integer val = (int)(Math.random() * (10000-1));
+            long startTimeTmmp = System.nanoTime();
+            bInt.rechercheArbre(val);
+            long endTimeTmp = System.nanoTime();
+            long timeElapsedTmp = endTimeTmp - startTimeTmmp;
+            if(maxTime<timeElapsedTmp) {
+                maxTime = timeElapsedTmp;
+            }
+            if(minTime>timeElapsedTmp){
+                minTime = timeElapsedTmp;
+            }
+        }
+        endTime = System.nanoTime();
+        timeElapsed = endTime - startTime;
+        moyenneParRecherche = timeElapsed/100;
+        System.out.println();
         System.out.println("rechercheArbre() : " + moyenneParRecherche/1000 + " microsecondes d'execution en moyenne !");
         System.out.println("temps minimum : " + minTime/1000 + " microsecondes d'execution");
         System.out.println("temps maximum : " + maxTime/1000 + " microsecondes d'execution");
 
         //test de temps()
-        //2: rechercheSequencielle
+        //3: rechercheSequencielle
         startTime = System.nanoTime();
         minTime = 147483647;
         maxTime = 0;
