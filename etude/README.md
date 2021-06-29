@@ -19,3 +19,5 @@ Graphique des temps de recherche minimum :
 
 Graphique des temps de recherche maximum :
 ![Graphique des maximums](https://github.com/Gilles-Marco/b-tree/blob/master/etude/graphics/GraphMaximums.png)
+
+Les résultats sont sans appels : la méthode de recherche depuis l'index est bien plus efficace que la recherche séquencielle. Effectivement, la différence est d'un facteur proche de 100 pour les moyennes entre les deux méthodes.
