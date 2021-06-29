@@ -44,7 +44,7 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
 
 
     public boolean addValeur(KeyValue<Type, ValueType> valeur) {
-        System.out.println("Ajout de la valeur : " + valeur.toString());
+        //System.out.println("Ajout de la valeur : " + valeur.toString());
         if (racine.contient(valeur.getKey()) == null) {
             Noeud<Type, ValueType> newRacine = racine.addValeur(valeur);
             if (racine != newRacine)
@@ -56,7 +56,7 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
 
 
     public void removeValeur(Type valeur) {
-        System.out.println("Retrait de la valeur : " + valeur.toString());
+        //System.out.println("Retrait de la valeur : " + valeur.toString());
         if (racine.contient(valeur) != null) {
             Noeud<Type, ValueType> newRacine = racine.removeValeur(valeur, false);
             if (racine != newRacine)
@@ -85,8 +85,8 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
             }
 
             if (noeud.fils != null && noeud.fils.size() > 0) {
-                if (stack.addAll(noeud.fils)) System.out.println("Add to stack");
-                else System.out.println("Error couldnt add to the stack");
+                if (stack.addAll(noeud.fils)) /*System.out.println("Add to stack")*/;
+                //else System.out.println("Error couldnt add to the stack");
             }
 
             System.out.println("Pop stack");
