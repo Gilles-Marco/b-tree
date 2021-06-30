@@ -5,11 +5,12 @@ Dans le cadre de notre projet nous avons été amené à étudier et comparer le
 Nous avons dans un premier temps modifié l'application afin d'avoir un nouveau main nous permettant de tester sans avoir à lancer l'interface graphique :
 
 Dans un premier temps nous avons pour la recherche depuis l'index, utilisé la fonction déjà fournie (rechercheArbre) par nos professeurs. Cependant, nous avions des résultats assez surprenant, nous avons donc pris la décision de recréer la méthode avec une nouvelle version que nous avons nommée rechercheArbreHomemade().
-En effet la méthode de recherche depuis l'index est sensée être plus rapide, or nous n'avons pas constaté cela, nous avons eu le contraire.
+En effet la méthode de recherche depuis l'index est sensée être plus rapide, or nous n'avons pas constaté cela avec fonction fournie, nous avons eu le contraire.
 
 ### Graphiques
 
-Voici ci-dessous les graphiques des résultats que nous avons obtenus. Sur ces graphiques, nous avons comparé les moyennes, les minimums et les temps maximums de recherche avec les deux méthodes. (Nous avons laissé la méthode initiale afin que vous puissiez voir les raisons qui nous on fait refaire la méthode)
+Voici ci-dessous les graphiques des résultats que nous avons obtenus sur un total de 100 recherche de clef. Sur ces graphiques, nous avons comparé les moyennes, les minimums et les temps maximums de recherche avec les deux méthodes et avec des échantillons de taille différentes (1000,10000 et 100000). 
+(Nous avons laissé la méthode initiale afin que vous puissiez voir les raisons qui nous on fait refaire la méthode)
 
 Graphique des moyennes de temps de recherche :
 ![Graphique des moyennes](https://github.com/Gilles-Marco/b-tree/blob/master/etude/graphics/GraphMoyennes.png)
