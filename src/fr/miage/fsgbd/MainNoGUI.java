@@ -34,13 +34,13 @@ public class MainNoGUI {
         }
         System.out.println("Data successfully loaded !");
 
-        /*KeyValue<Integer, FrenchIdentity> result = bInt.rechercheArbre(5400);
-        System.out.println(result.getValue());
+//        KeyValue<Integer, FrenchIdentity> result = bInt.rechercheArbreHomemade(5400);
+//        System.out.println(result.getValue());
 
-        result = bInt.rechercheSequentielle(5400);
+//        result = bInt.rechercheSequentielle(5400);
 //        KeyValue<Integer, FrenchIdentity> result = bInt.rechercheSequentielle(5400);
-        System.out.println(result.getValue());*/
-        //j'ai commenté parce que ça fait planter l'application quand j'essaye avec avec un nombre de clef differents de 10000
+//        System.out.println(result.getValue());
+
         
         
         //test de temps

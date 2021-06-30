@@ -32,7 +32,7 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
 
     private DefaultMutableTreeNode bArbreToJTree(Noeud<Type, ValueType> root) {
         StringBuilder txt = new StringBuilder();
-        for (KeyValue key : root.keys)
+        for (KeyValue<Type, ValueType> key : root.keys)
             txt.append(key.toString()).append(" ");
 
         DefaultMutableTreeNode racine2 = new DefaultMutableTreeNode(txt.toString(), true);
@@ -80,13 +80,13 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
 
         while(result == null){
             int index = 0;
-            for(KeyValue<Type, ValueType> kv : this.racine.keys){
+            for(KeyValue<Type, ValueType> kv : noeud.keys){
                 if(valeur.equals(kv.getKey())){
                     result = kv;
                     break;
                 }
 
-                if(noeud.compare(kv.getKey(), valeur)) break;
+                if(noeud.compare(valeur, kv.getKey())) break;
                 else index++;
             }
 
