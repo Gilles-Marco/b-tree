@@ -80,7 +80,7 @@ public class BTreePlus<Type, ValueType> implements java.io.Serializable {
 
         while(result == null){
             int index = 0;
-            for(KeyValue<Type, ValueType> kv : this.racine.keys){
+            for(KeyValue<Type, ValueType> kv : noeud.keys){
                 if(valeur.equals(kv.getKey())){
                     result = kv;
                     break;
