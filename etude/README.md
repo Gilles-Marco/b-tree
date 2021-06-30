@@ -39,3 +39,7 @@ Graphique des temps de recherche maximum :
 ![Graphique des maximums](https://github.com/Gilles-Marco/b-tree/blob/master/etude/graphics/GraphMaximums.png)
 
 Au vu des résultats la méthode de recherche depuis l'index est bien plus efficace que la recherche séquentielle du à la complexité des méthodes.
+
+Les personnes ayant participé à la partie 2 du projet de recherche sont 
+- Clément GUIBOURG
+- Marco GILLES
